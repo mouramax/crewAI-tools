@@ -1322,16 +1322,6 @@
             "required": false,
             "title": "Api Key"
           },
-          "client": {
-            "anyOf": [
-              {},
-              {
-                "type": "null"
-              }
-            ],
-            "default": null,
-            "title": "Client"
-          },
           "content": {
             "anyOf": [
               {
@@ -2979,13 +2969,9 @@
         "properties": {
           "config": {
             "$ref": "#/$defs/OxylabsAmazonProductScraperConfig"
-          },
-          "oxylabs_api": {
-            "title": "Oxylabs Api"
           }
         },
         "required": [
-          "oxylabs_api",
           "config"
         ],
         "title": "OxylabsAmazonProductScraperTool",
@@ -3195,13 +3181,9 @@
         "properties": {
           "config": {
             "$ref": "#/$defs/OxylabsAmazonSearchScraperConfig"
-          },
-          "oxylabs_api": {
-            "title": "Oxylabs Api"
           }
         },
         "required": [
-          "oxylabs_api",
           "config"
         ],
         "title": "OxylabsAmazonSearchScraperTool",
@@ -3424,13 +3406,9 @@
         "properties": {
           "config": {
             "$ref": "#/$defs/OxylabsGoogleSearchScraperConfig"
-          },
-          "oxylabs_api": {
-            "title": "Oxylabs Api"
           }
         },
         "required": [
-          "oxylabs_api",
           "config"
         ],
         "title": "OxylabsGoogleSearchScraperTool",
@@ -3601,13 +3579,9 @@
         "properties": {
           "config": {
             "$ref": "#/$defs/OxylabsUniversalScraperConfig"
-          },
-          "oxylabs_api": {
-            "title": "Oxylabs Api"
           }
         },
         "required": [
-          "oxylabs_api",
           "config"
         ],
         "title": "OxylabsUniversalScraperTool",
@@ -6295,6 +6269,17 @@
       "humanized_name": "Web Automation Tool",
       "init_params_schema": {
         "$defs": {
+          "AvailableModel": {
+            "enum": [
+              "gpt-4o",
+              "gpt-4o-mini",
+              "claude-3-5-sonnet-latest",
+              "claude-3-7-sonnet-latest",
+              "computer-use-preview"
+            ],
+            "title": "AvailableModel",
+            "type": "string"
+          },
           "EnvVar": {
             "properties": {
               "default": {
@@ -6365,6 +6350,17 @@
             ],
             "default": null,
             "title": "Model Api Key"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AvailableModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "claude-3-7-sonnet-latest"
           },
           "project_id": {
             "anyOf": [
@@ -6668,6 +6664,36 @@
             ],
             "title": "EnvVar",
             "type": "object"
+          },
+          "Vectorizers": {
+            "description": "The available vectorization modules in Weaviate.\n\nThese modules encode binary data into lists of floats called vectors.\nSee the [docs](https://weaviate.io/developers/weaviate/modules/retriever-vectorizer-modules) for more details.\n\nAttributes:\n    `NONE`\n        No vectorizer.\n    `TEXT2VEC_AWS`\n        Weaviate module backed by AWS text-based embedding models.\n    `TEXT2VEC_COHERE`\n        Weaviate module backed by Cohere text-based embedding models.\n    `TEXT2VEC_CONTEXTIONARY`\n        Weaviate module backed by Contextionary text-based embedding models.\n    `TEXT2VEC_GPT4ALL`\n        Weaviate module backed by GPT-4-All text-based embedding models.\n    `TEXT2VEC_HUGGINGFACE`\n        Weaviate module backed by HuggingFace text-based embedding models.\n    `TEXT2VEC_OPENAI`\n        Weaviate module backed by OpenAI and Azure-OpenAI text-based embedding models.\n    `TEXT2VEC_PALM`\n        Weaviate module backed by PaLM text-based embedding models.\n    `TEXT2VEC_TRANSFORMERS`\n        Weaviate module backed by Transformers text-based embedding models.\n    `TEXT2VEC_JINAAI`\n        Weaviate module backed by Jina AI text-based embedding models.\n    `TEXT2VEC_VOYAGEAI`\n        Weaviate module backed by Voyage AI text-based embedding models.\n    `TEXT2VEC_WEAVIATE`\n        Weaviate module backed by Weaviate's self-hosted text-based embedding models.\n    `IMG2VEC_NEURAL`\n        Weaviate module backed by a ResNet-50 neural network for images.\n    `MULTI2VEC_CLIP`\n        Weaviate module backed by a Sentence-BERT CLIP model for images and text.\n    `MULTI2VEC_PALM`\n        Weaviate module backed by a palm model for images and text.\n    `MULTI2VEC_BIND`\n        Weaviate module backed by the ImageBind model for images, text, audio, depth, IMU, thermal, and video.\n    `MULTI2VEC_VOYAGEAI`\n        Weaviate module backed by a Voyage AI multimodal embedding models.\n    `REF2VEC_CENTROID`\n        Weaviate module backed by a centroid-based model that calculates an object's vectors from its referenced vectors.",
+            "enum": [
+              "none",
+              "text2vec-aws",
+              "text2vec-cohere",
+              "text2vec-contextionary",
+              "text2vec-databricks",
+              "text2vec-gpt4all",
+              "text2vec-huggingface",
+              "text2vec-mistral",
+              "text2vec-ollama",
+              "text2vec-openai",
+              "text2vec-palm",
+              "text2vec-transformers",
+              "text2vec-jinaai",
+              "text2vec-voyageai",
+              "text2vec-weaviate",
+              "img2vec-neural",
+              "multi2vec-clip",
+              "multi2vec-cohere",
+              "multi2vec-jinaai",
+              "multi2vec-bind",
+              "multi2vec-palm",
+              "multi2vec-voyageai",
+              "ref2vec-centroid"
+            ],
+            "title": "Vectorizers",
+            "type": "string"
           }
         },
         "description": "Tool to search the Weaviate database",
@@ -6735,13 +6761,14 @@
           },
           "vectorizer": {
             "anyOf": [
-              {},
+              {
+                "$ref": "#/$defs/Vectorizers"
+              },
               {
                 "type": "null"
               }
             ],
-            "default": null,
-            "title": "Vectorizer"
+            "default": null
           },
           "weaviate_api_key": {
             "description": "The API key for the Weaviate cluster",
